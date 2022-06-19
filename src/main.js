@@ -6,7 +6,8 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:4000/'
+
+axios.defaults.baseURL = 'https://blog-backend.azurewebsites.net/api/'
 
 const app = createApp(App)
 

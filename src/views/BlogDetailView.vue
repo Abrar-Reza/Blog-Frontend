@@ -3,15 +3,16 @@
     import {onMounted, ref} from 'vue'
     import axios from 'axios'
 
-    const blogs = ref([])
+    const title = ref()
+    const article = ref()
     const route = useRoute();
     onMounted(() => {
         const blog_detail = route.params.blog_detail
         axios.get(`blogs/${blog_detail}`)
         .then(response => {
-            blogs.value = response.data
-            console.log(response.data)
-            document.title = 'Blog | ' + blogs.value.title
+            title.value = response.data.data.attributes.title
+            article.value = response.data.data.attributes.article
+            document.title = 'Blog | ' + title.value
         })
         .catch(error => {
             console.log(error)
@@ -22,9 +23,9 @@
 <template>
 
     <div class="home mx-auto px-3 mb-5" style="max-width: 1000px;">
-        <h1 class="title mt-2 text-center">{{blogs.title}}</h1>
-        <img src="@/assets/images/neon-street.jpg" class="img-fluid mb-2" alt="...">
-        {{blogs.article}}
+        <h1 class="title mt-2 text-center">{{title}}</h1>
+        <img src="@/assets/images/neon-street.jpg" class="img-fluid mb-2">
+        <div v-html="article"></div>
     </div>
     
 </template>
