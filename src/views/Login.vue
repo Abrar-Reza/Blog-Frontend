@@ -1,11 +1,11 @@
 <script setup>
-    import {useRouter} from 'vue-router'
-    import {ref} from 'vue'
+    import { useRouter, RouterLink } from 'vue-router'
+    import { ref } from 'vue'
     import axios from 'axios'
-    import {useAuthStore} from "@/stores/auth"
+    import { useAuthStore } from "@/stores/auth"
 
     const authStore = useAuthStore();
-    const {setToken} = authStore
+    const { setToken } = authStore
     
     const router = useRouter()
     const identifier = ref('')
@@ -21,10 +21,11 @@
                 setToken(token)
                 console.log('User profile', response.data.user);
                 console.log('User token', token);
-                router.push('profile')
+                router.push('/profile')
             })
             .catch(error => {
-                console.log(error)
+                console.log(error.response.data.error.message)
+                alert("Invaild email or password")
             })
         }
     }
@@ -32,26 +33,39 @@
 </script>
 
 <template>
-    <div class="login mx-3">
 
-        <h1 class="text-center mb-3" style="margin-top: 20vh">Login</h1>
+    <div class="vh-100 d-flex justify-content-center align-items-center">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="card bg-white">
+                        <div @submit.prevent="Login" class="card-body p-5">
+                            <form class="mb-3 mt-md-4">
+                                <h2 class="fw-bold mb-2 text-uppercase ">Login</h2>
+                                <p class=" mb-5">Please enter your email and password!</p>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label ">Email address</label>
+                                    <input v-model="identifier" type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label ">Password</label>
+                                    <input v-model="password" type="password" class="form-control" id="password" placeholder="*******" required>
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-outline-dark" type="submit">Login</button>
+                                </div>
+                            </form>
+                            <div>
+                                <p class="mb-0  text-center">Don't have an account? 
+                                    <RouterLink to="/signup" class="text-primary fw-bold">SignUp</RouterLink>
+                                </p>
+                            </div>
 
-        <form @submit.prevent="Login">
-            <div class="mx-auto" style="max-width: 350px;">
-                <div class="form-floating mb-3">
-                    <input type="username" name="username" class="form-control" id="floatingInput" placeholder="Username" v-model="identifier" required>
-                    <label for="floatingInput">Username</label>
-                </div>
-                <div class="form-floating">
-                    <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" v-model="password" required>
-                    <label for="floatingPassword">Password</label>
-                </div>
-
-                <div class="d-grid gap-2 mt-3">
-                    <button class="btn btn-primary" type="submit">Login</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
-
+        </div>
     </div>
+
 </template>

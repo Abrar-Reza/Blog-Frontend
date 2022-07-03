@@ -1,5 +1,10 @@
 <script setup>
   import { RouterView, RouterLink } from 'vue-router'
+  import { useAuthStore } from "@/stores/auth"
+  import { storeToRefs } from 'pinia';
+
+  const { isAuthenticated } = storeToRefs(useAuthStore())
+
 </script>
 
 <template>
@@ -15,19 +20,20 @@
           <li class="nav-item">
             <RouterLink class="nav-link active" aria-current="page" to="/">Home</RouterLink>
           </li>
-          <li class="nav-item">
+          <li v-if="!isAuthenticated" class="nav-item">
             <RouterLink class="nav-link" to="/login">Login</RouterLink>
           </li>
-          <li class="nav-item">
+          <li v-if="!isAuthenticated" class="nav-item">
             <RouterLink class="nav-link" to="/signup">Sign Up</RouterLink>
           </li>
-          <li class="nav-item">
+          <li v-if="isAuthenticated" class="nav-item">
             <RouterLink class="nav-link" to="/profile">Profile</RouterLink>
           </li>
         </ul>
       </div>
     </div>
   </nav>
+
   <RouterView />
   
 </template>
