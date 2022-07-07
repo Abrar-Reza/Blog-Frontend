@@ -21,13 +21,16 @@
             <RouterLink class="nav-link active" aria-current="page" to="/">Home</RouterLink>
           </li>
           <li v-if="!isAuthenticated" class="nav-item">
-            <RouterLink class="nav-link" to="/login">Login</RouterLink>
+            <RouterLink class="nav-link active" to="/login">Login</RouterLink>
           </li>
           <li v-if="!isAuthenticated" class="nav-item">
-            <RouterLink class="nav-link" to="/signup">Sign Up</RouterLink>
+            <RouterLink class="nav-link active" to="/signup">Sign Up</RouterLink>
           </li>
           <li v-if="isAuthenticated" class="nav-item">
-            <RouterLink class="nav-link" to="/profile">Profile</RouterLink>
+            <RouterLink class="nav-link active" to="/create_blog">Create Blog</RouterLink>
+          </li>
+          <li v-if="isAuthenticated" class="nav-item">
+            <RouterLink class="nav-link active" to="/profile">Profile</RouterLink>
           </li>
         </ul>
       </div>

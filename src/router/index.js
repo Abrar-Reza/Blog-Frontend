@@ -11,13 +11,18 @@ const router = createRouter({
     },
     {
       path: '/:blog_detail',
-      name: 'blogdetail',
+      name: 'blog_detail',
       component: () => import('../views/BlogDetailView.vue')
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('../views/Login.vue')
+    },
+    {
+      path: '/create_blog',
+      name: 'create_blog',
+      component: () => import('../views/CreateBlog.vue')
     },
     {
       path: '/profile',
