@@ -44,9 +44,10 @@
     function deleteBlog(blog_id) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${authStore.token}`;
         axios.delete(`blogs/${blog_id}`)
-            .then(() => {
+        .then(response => {
             let i = blogs.value.map(data => data.id).indexOf(blog_id);
             blogs.value.splice(i, 1);
+            console.log(response.data.data)
         })
         .catch(error => {
             console.log(error)
@@ -56,7 +57,7 @@
 
 <template>
 
-    <div class="mx-3">
+    <div class="mx-auto mx-3 mt-3 border rounded p-4" style="max-width: 1000px;">
         <form v-on:submit.prevent="addBlog">
             <div class="form-floating mb-3">
                 <input v-model="title" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
@@ -78,12 +79,14 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <div>
-                            <button @click="deleteBlog(blog.id)" class="btn btn-outline-danger float-end">Delete</button>
-                            <h5 class="card-title">{{ blog.attributes.title }}</h5>
-                        </div>
+                        <h5 class="card-title">{{ blog.attributes.title }}</h5>
                         <div class="card-text text-truncate" style="height: 75px" v-html="blog.attributes.article"></div>
-                        <!-- <RouterLink :to="`${blog.id}`" class="stretched-link"></RouterLink> -->
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <button @click="deleteBlog(blog.id)" class="btn btn-outline-danger float-end mb-3">Delete</button>
+                            <button class="btn btn-outline-primary float-end me-3 mb-3"><RouterLink :to="`/update_blog/${blog.id}`" class="text-decoration-none">Update</RouterLink></button>
+                        </div>
                     </div>
                 </div>
             </div>

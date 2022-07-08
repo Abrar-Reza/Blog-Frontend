@@ -31,6 +31,7 @@
 </script>
 
 <template>
+
     <div>
         <h1 class="text-center mt-3">Profile</h1>
         <p class="text-center">Username: {{profile.username}}</p>

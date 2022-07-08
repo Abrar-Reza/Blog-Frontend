@@ -20,9 +20,9 @@ const router = createRouter({
       component: () => import('../views/Login.vue')
     },
     {
-      path: '/create_blog',
-      name: 'create_blog',
-      component: () => import('../views/CreateBlog.vue')
+      path: '/signup',
+      name: 'signup',
+      component: () => import('../views/SignUp.vue')
     },
     {
       path: '/profile',
@@ -30,9 +30,14 @@ const router = createRouter({
       component: () => import('../views/Profile.vue')
     },
     {
-      path: '/signup',
-      name: 'signup',
-      component: () => import('../views/SignUp.vue')
+      path: '/create_blog',
+      name: 'create_blog',
+      component: () => import('../views/CreateBlog.vue')
+    },
+    {
+      path: '/update_blog/:blog_post',
+      name: 'update_blog',
+      component: () => import('../views/UpdateBlog.vue')
     }
   ]
 })
