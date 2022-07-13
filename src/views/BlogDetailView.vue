@@ -5,13 +5,15 @@
 
     const title = ref()
     const article = ref()
+    const author = ref()
     const route = useRoute();
     onMounted(() => {
         const blog_detail = route.params.blog_detail
-        axios.get(`blogs/${blog_detail}`)
+        axios.get(`blogs/${blog_detail}?populate=author`)
         .then(response => {
             title.value = response.data.data.attributes.title
             article.value = response.data.data.attributes.article
+            author.value = response.data.data.attributes.author.data.attributes.username
             document.title = 'Blog | ' + title.value
         })
         .catch(error => {
@@ -23,8 +25,9 @@
 <template>
 
     <div class="home mx-auto px-3 mb-5" style="max-width: 1000px;">
-        <h1 class="title mt-2 text-center">{{title}}</h1>
+        <h1 class="mt-2 text-center">{{title}}</h1>
         <img src="@/assets/images/neon-street.jpg" class="img-fluid mb-2">
+        <b class="mt-2 text-capitalize">by {{author}}</b>
         <div v-html="article"></div>
     </div>
     

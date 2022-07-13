@@ -9,14 +9,16 @@
     const id = ref('')
     const title = ref('')
     const article = ref('')
+    const author = ref('')
     const route = useRoute();
     onMounted(() => {
         const blog_post = route.params.blog_post
-        axios.get(`blogs/${blog_post}`)
+        axios.get(`blogs/${blog_post}?populate=author`)
         .then(response => {
             id.value = response.data.data.id
             title.value = response.data.data.attributes.title
             article.value = response.data.data.attributes.article
+            author.value = response.data.data.attributes.author.data.attributes.username
             console.log(response.data.data)
             document.title = 'Blog | ' + title.value
         })
@@ -64,6 +66,7 @@
     <div class="mx-auto px-3 mb-5" style="max-width: 1000px;">
         <h1 class="title mt-2 text-center">{{title}}</h1>
         <img src="@/assets/images/neon-street.jpg" class="img-fluid mb-2">
+        <b class="mt-2 text-capitalize">by {{author}}</b>
         <div v-html="article"></div>
     </div>
     

@@ -12,6 +12,19 @@
         .then(response => {
             blogs.value = (response.data.data)
             console.log(response.data.data)
+
+        })
+        .catch(error => {
+            console.log(error)
+        })
+
+        axios.get('users/me', {
+            headers: {
+                'Authorization': `Bearer ${authStore.token}`
+            }
+        })
+        .then(response => {
+            profile_id.value = (response.data.id)
         })
         .catch(error => {
             console.log(error)
@@ -20,13 +33,17 @@
 
     const title = ref('')
     const article = ref('')
+    const profile_id = ref('')
     function addBlog() {
         if (title.value) {
             axios.defaults.headers.post['Authorization'] = `Bearer ${authStore.token}`;
             axios.post('blogs/', {
                 data: {
                     title: title.value,
-                    article: article.value
+                    article: article.value,
+                    author: {
+                        id: profile_id.value 
+                    }
                 }
             })
             .then(response => {
