@@ -33,16 +33,32 @@
 
     const title = ref('')
     const article = ref('')
+    const selectfile = ref('')
     const profile_id = ref('')
+    const image_id = ref('')
+
+    function onFileUpload(event) {
+        selectfile.value = event.target.files[0];
+    }
+    
     function addBlog() {
-        if (title.value) {
-            axios.defaults.headers.post['Authorization'] = `Bearer ${authStore.token}`;
+        var formData = new FormData();
+        formData.append("files", selectfile.value);
+        axios.post('upload/', formData)
+        .then(response => {
+            image_id.value = response.data[0].id
+            console.log(image_id.value)
+
+
             axios.post('blogs/', {
                 data: {
                     title: title.value,
                     article: article.value,
                     author: {
                         id: profile_id.value 
+                    },
+                    thumbnail: {
+                        id: image_id.value
                     }
                 }
             })
@@ -55,16 +71,29 @@
             .catch(error => {
                 console.log(error)
             })
-        }
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     function deleteBlog(blog_id) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${authStore.token}`;
-        axios.delete(`blogs/${blog_id}`)
+        axios.delete(`blogs/${blog_id}?populate=*`)
         .then(response => {
             let i = blogs.value.map(data => data.id).indexOf(blog_id);
             blogs.value.splice(i, 1);
             console.log(response.data.data)
+            console.log(response.data.data.attributes.thumbnail.data.id)
+            const upload_id = response.data.data.attributes.thumbnail.data.id
+            
+            axios.delete(`upload/files/${upload_id}`)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
         })
         .catch(error => {
             console.log(error)
@@ -75,10 +104,14 @@
 <template>
 
     <div class="mx-auto mx-3 mt-3 border rounded p-4" style="max-width: 1000px;">
-        <form v-on:submit.prevent="addBlog">
+        <form v-on:submit.prevent="addBlog" enctype="multipart/form-data">
             <div class="form-floating mb-3">
                 <input v-model="title" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
                 <label for="floatingInput">Title</label>
+            </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Default file input example</label>
+                <input class="form-control" type="file" id="formFile" @change="onFileUpload" tabindex="-1">
             </div>
             <div class="form-floating">
                 <textarea v-model="article" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
