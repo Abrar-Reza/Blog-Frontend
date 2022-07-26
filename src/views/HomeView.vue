@@ -4,8 +4,9 @@
     import axios from 'axios'
 
     const blogs = ref([])
+    const url = "http://localhost:1337"
     onMounted(() => {
-        axios.get('blogs/')
+        axios.get('blogs?populate=*')
         .then(response => {
             blogs.value = (response.data.data)
             console.log(response.data.data)
@@ -22,7 +23,7 @@
         <div class="card mb-3 mt-3 mx-auto" style="max-width: 1000px;">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <img src="@/assets/images/neon-street.jpg" class="img-fluid">
+                    <img :src="url + blog.attributes.thumbnail.data.attributes.url" class="img-fluid">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
