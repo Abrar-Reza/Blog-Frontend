@@ -6,9 +6,10 @@
 
     const authStore = useAuthStore();
 
+    const url = "http://localhost:1337"
     const blogs = ref([])
     onMounted(() => {
-        axios.get('blogs/')
+        axios.get('blogs?populate=*')
         .then(response => {
             blogs.value = (response.data.data)
             console.log(response.data.data)
@@ -24,7 +25,7 @@
             }
         })
         .then(response => {
-            profile_id.value = (response.data.id)
+            profile_id.value = response.data.id
         })
         .catch(error => {
             console.log(error)
@@ -33,8 +34,8 @@
 
     const title = ref('')
     const article = ref('')
-    const selectfile = ref('')
     const profile_id = ref('')
+    const selectfile = ref('')
     const image_id = ref('')
 
     function onFileUpload(event) {
@@ -44,13 +45,14 @@
     function addBlog() {
         var formData = new FormData();
         formData.append("files", selectfile.value);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${authStore.token}`;
         axios.post('upload/', formData)
         .then(response => {
             image_id.value = response.data[0].id
             console.log(image_id.value)
 
 
-            axios.post('blogs/', {
+            axios.post('blogs?populate=*', {
                 data: {
                     title: title.value,
                     article: article.value,
@@ -110,8 +112,8 @@
                 <label for="floatingInput">Title</label>
             </div>
             <div class="mb-3">
-                <label for="formFile" class="form-label">Default file input example</label>
-                <input class="form-control" type="file" id="formFile" @change="onFileUpload" tabindex="-1">
+                <label for="formFile" class="form-label">Thumbnail</label>
+                <input class="form-control" type="file" id="formFile" @change="onFileUpload">
             </div>
             <div class="form-floating">
                 <textarea v-model="article" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
@@ -125,7 +127,7 @@
         <div class="card mb-3 mt-3 mx-auto" style="max-width: 1000px;">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <img src="@/assets/images/neon-street.jpg" class="img-fluid">
+                    <img :src="url + blog.attributes.thumbnail.data.attributes.url" class="img-fluid">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
